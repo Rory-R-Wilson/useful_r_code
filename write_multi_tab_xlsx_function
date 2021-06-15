@@ -2,7 +2,6 @@
 
 library(openxlsx)
 
-
 write_multi_tab_xlsx <- function(named_df_list,filename)  #the list must be a dataframe and must have names
 
 wb <- createWorkbook()
