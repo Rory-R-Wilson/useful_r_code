@@ -1,0 +1,20 @@
+#This is a function to write a list of dataframes to an xlsx file, using openxlsx
+
+library(openxlsx)
+
+
+write_multi_tab_xlsx <- function(named_df_list,filename)  #the list must be a dataframe and must have names
+
+wb <- createWorkbook()
+
+for (i in 1:length(named_df_list)) {
+  addWorksheet(wb, names(named_df_list)[i])
+  writeData(wb, names(named_df_list)[i], named_df_list[[i]])
+}
+
+saveWorkbook(wb, file = filename, overwrite = TRUE)
+
+
+
+
+
