@@ -1,0 +1,41 @@
+#A function to calculate the inflation factor for a gwas or ewas
+
+
+calculate_inflation_lambda <- function(stat,stat.type = "Z") {
+  if (stat.type == "Z")     z <- stat
+  if (stat.type == "CHISQ") z <- sqrt(stat)
+  if (stat.type == "PVAL")  z <- qnorm(stat/2)
+  lambda <- median(z^2)/qchisq(0.5,1)
+return(lambda)
+}
+
+#####################################
+##alternate version
+#1) Convert your output to chi-squared values
+## For z-scores, just square them
+#chisq <- data$z^2
+# For chi-squared values, keep as is
+#chisq <- data$chisq
+# For p-values, calculate chi-squared statistic
+#chisq <- qchisq(1-data$pval,1)
+#(2) Calculate lambda gc (λgc)
+#median(chisq)/qchisq(0.5,1)
+
+
+#One may want to calculate the inflation factor for only the largest x proportion of the p-values
+calculate_inflation_lambda_prop <- function(stat,stat.type = "Z",prop=1.0) {
+
+  if (stat.type == "Z")     z <- stat
+  if (stat.type == "CHISQ") z <- sqrt(stat)
+  if (stat.type == "PVAL")  z <- qnorm(stat/2)
+
+#using only the bottom proportion of the stat
+  n.stat <- z^2
+  n.stat <- n.stat[order(n.stat,decreasing=FALSE)]
+  n.stat <- n.stat[1:ceiling(length(n.stat)*(prop))]
+
+  lambda <- median(n.stat)/qchisq(0.5,1)
+  return(lambda)
+}
+
+
