@@ -1,0 +1,3 @@
+#a function to check if a data frame column/vec is a unique identifier of individuals, or could be used as an ID.
+
+val_col <- function(vec) { !is.null(vec) & !any(is.na(vec)) & !any(duplicated(vec)) }
